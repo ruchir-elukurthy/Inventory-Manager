@@ -200,22 +200,27 @@ const data = [
   },
 ];
 
+
 let type_book = [];
 let type_cd = [];
 let type_dvd = [];
 
 function separate_different_types(data) {
   let length_data = data.length;
-  for (let i = 0; i < length_data; ++i) {
-    if (data[i].type === "book") {
+  for(let i = 0; i < length_data; ++i) {
+    if(data[i].type === "book") {
       type_book.push(data[i]);
-    } else if (data[i].type === "cd") {
+    }
+    else if(data[i].type === "cd") {
       type_cd.push(data[i]);
-    } else {
+    }
+    else {
       type_dvd.push(data[i]);
     }
   }
 }
+
+
 
 function sort_by_price_each_item(type_book, type_cd, type_dvd) {
   type_cd.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
@@ -224,114 +229,155 @@ function sort_by_price_each_item(type_book, type_cd, type_dvd) {
 }
 
 function task1(data) {
-  var Result = {
+  var Result = {             
     book: [],
     cd: [],
-    dvd: [],
+    dvd: []
   };
 
   separate_different_types(data);
-  sort_by_price_each_item(type_book, type_cd, type_dvd);
+  //console.log(typecd)
+  sort_by_price_each_item(type_book,type_cd,type_dvd);
   let counter = 0;
-
-  while (counter < 5 && counter < type_book.length) {
+  
+  while(counter < 5 && counter < type_book.length) {
     Result.book.push(type_book[counter]);
     ++counter;
   }
-
+  
   counter = 0;
-  while (counter < 5 && counter < type_cd.length) {
-    Result.cd.push(type_book[counter]);
+  while(counter < 5 && counter < type_cd.length) {
+    Result.cd.push(type_cd[counter]);
     ++counter;
   }
-
+  
   counter = 0;
-  while (counter < 5 && counter < type_dvd.length) {
-    Result.dvd.push(type_book[counter]);
+  while(counter < 5 && counter < type_dvd.length) {
+    Result.dvd.push(type_dvd[counter]);
     ++counter;
   }
   return Result;
 }
 
+
 function task2() {
-  var Result = {
+  var Result = {             
     cd: [],
-  };
+  }
   let cd_length = type_cd.length;
-  for (let i = 0; i < cd_length; ++i) {
+  for(let i = 0; i < cd_length; ++i) {
     let length_tracks = type_cd[i].tracks.length;
     let total_time = 0;
-    for (let j = 0; j < length_tracks; ++j) {
+    for(let j = 0; j < length_tracks; ++j) {
       total_time += type_cd[i].tracks[j].seconds;
     }
     total_time /= 60;
-    if (total_time > 60) {
+    if(total_time > 60) {
       Result.cd.push(type_cd[i]);
     }
   }
   return Result;
 }
 
+
 function task3() {
   let cd_length = type_cd.length;
   let book_length = type_book.length;
-  var Result = {
+  var Result = {             
     cd: [],
-  };
+  }
   var set = new Set();
-  for (let i = 0; i < book_length; ++i) {
+  for(let i = 0; i < book_length; ++i) {
     set.add(type_book[i].author);
   }
-  for (let i = 0; i < cd_length; ++i) {
-    if (set.has(type_cd[i].author)) {
+  for(let i = 0; i < cd_length; ++i) {
+    if(set.has(type_cd[i].author)) {
       Result.cd.push(type_cd[i].author);
     }
   }
   return Result;
 }
 
+
+
 function task4() {
-  var Result = {
+
+  ///(?:(?:18|19|20|21)[0-9]{2})/g
+  var Result = {             
     book: [],
     cd: [],
-    dvd: [],
+    dvd: []
   };
-
+  
   let cd_length = type_cd.length;
   let book_length = type_book.length;
   let dvd_length = type_dvd.length;
 
-  for (let i = 0; i < book_length; ++i) {
-    let year = parseInt(type_book[i].title);
-    if (!isNaN(year)) {
+  var reg_ex_expr = /(?:(?:18|19|20|21)[0-9]{2})/g
+
+  for(let i = 0; i < book_length; ++i) {
+    // let year = parseInt(type_book[i].title);
+    // if(!isNaN(year)) {
+    //   Result.book.push(type_book[i]);
+    // }
+    let year = type_book[i].title.match(reg_ex_expr);
+    // console.log(type_book[i].title);
+    // console.log(year);
+    if(year != null) {
+      console.log(type_book[i].title);
+      console.log(year);
       Result.book.push(type_book[i]);
-    } else {
+    }
+    else {
       let length_chapter = type_book[i].chapter;
-      for (let j = 0; j < length_chapter; ++j) {
-        let year = parseInt(type_book[i].chapter[j]);
-        if (!isNaN(year)) {
+      for(let j = 0; j < length_chapter; ++j) {
+        // let year = parseInt(type_book[i].chapter[j]);
+        // if(!isNaN(year)) {
+        //   Result.book.push(type_book[i]);
+        // }
+        year = type_book[i].chapter[j].match(reg_ex_expr);
+        // console.log(type_book[i].chapter);
+        // console.log(year);
+        if(year != null) {
+          console.log(type_book[i].title);
+          console.log(year);
           Result.book.push(type_book[i]);
         }
       }
     }
   }
-
-  for (let i = 0; i < dvd_length; ++i) {
-    let year = parseInt(type_dvd[i].title);
-    if (!isNaN(year)) {
+  
+  for(let i = 0; i < dvd_length; ++i) {
+    // let year = parseInt(type_dvd[i].title);
+    // if(!isNaN(year)) {
+    //   Result.dvd.push(type_dvd[i]);
+    // }
+    var result = type_dvd[i].title.match(reg_ex_expr);
+    //console.log(result);
+    if(result != null) {
       Result.dvd.push(type_dvd[i]);
     }
   }
+  
+  for(let i = 0; i < cd_length; ++i) {
+    // let year = parseInt(type_cd[i].title);
+    // if(!isNaN(year)) {
+    //   Result.cd.push(type_cd[i]);
+    // }
 
-  for (let i = 0; i < cd_length; ++i) {
-    let year = parseInt(type_cd[i].title);
-    if (!isNaN(year)) {
+    let year = type_cd[i].title.match(reg_ex_expr);
+    if(year != null) {
       Result.cd.push(type_cd[i]);
-    } else {
+    }
+    else {
       let length_track = type_cd[i].tracks.length;
-      for (let j = 0; j < length_track; ++j) {
-        let year = parseInt(type_cd[i].tracks[j].name);
-        if (!isNaN(year)) {
+      for(let j = 0; j < length_track; ++j) {
+        // let year = parseInt(type_cd[i].tracks[j].name);
+        // if(!isNaN(year)) {
+        //   Result.cd.push(type_cd[i]);
+        // }
+        year = type_cd[i].tracks[j].name.match(reg_ex_expr);
+        if(year != null) {
           Result.cd.push(type_cd[i]);
         }
       }
@@ -340,13 +386,4 @@ function task4() {
   return Result;
 }
 
-/**
-console.log("Task1")
-console.log(task1(data));
-console.log("Task2")
-console.log(task2());
-console.log("Task3")
-console.log(task3());
-console.log("Task4")
-console.log(task4());
-**/
+
